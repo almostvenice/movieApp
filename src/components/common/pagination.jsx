@@ -7,7 +7,7 @@ const Pagination = (props) => {
 
     const pagesCount = Math.ceil(itemsCount / pageSize); //pagesCount = roundedUp(x / y) because it would = 0.9 otherwise
     if (pagesCount === 1) return null; //if there is only 1 page, dont show the pagination component
-    const pages = _.range(1, pagesCount + 1) //range 1 thru 4 so it includes pagesCount which is #3
+    const pages = _.range(1, pagesCount + 1) //range 1 thru 4 so it includes pagesCount which is #3 (similar to python range method)
 
     return ( 
     <nav>
@@ -27,7 +27,7 @@ const Pagination = (props) => {
     );
 };
 
-Pagination.propTypes = {
+Pagination.propTypes = {                            //checks if each prop was passed and if it was the correct type
     itemsCount: PropTypes.number.isRequired, 
     pageSize: PropTypes.number.isRequired, 
     onPageChange: PropTypes.number.isRequired, 

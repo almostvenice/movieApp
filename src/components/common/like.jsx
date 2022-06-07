@@ -5,7 +5,7 @@ const Like = (props) => {
     if (!props.liked) classes += "-o"; //if props.liked = false, add "-o" to the classes
     return (
         <i 
-            onClick={props.onClick}     
+            onClick={props.onClick}          //Heart props
             style={{cursor: 'pointer'}} 
             className={classes} 
             aria-hidden="true">

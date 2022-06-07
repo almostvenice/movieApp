@@ -21,7 +21,8 @@ export default class Movies extends Component {
     };
 
     componentDidMount() {
-        this.setState({ movies: getMovies(), genres: getGenres()})
+        const genres = [{ name: 'All Genres'}, ...getGenres()]
+        this.setState({ movies: getMovies(), genres: genres})
     }
 
     handleLike = (movie) => {
@@ -38,29 +39,32 @@ export default class Movies extends Component {
     };
 
     handleGenreSelect = genre => {
-        console.log(genre)
+        this.setState({selectedGenre: genre, currentPage: 1}) //needs current page for when you are on page 2+ and switch to a genre with only 1 page
     }
 
     render() {
         const {length: count} = this.state.movies;      //destructuring to get the count of movies.length
-        const {pageSize, currentPage, movies: allMovies, genres} = this.state;     //destructuring to get the state props
+        const {pageSize, currentPage, movies: allMovies, genres, selectedGenre} = this.state;     //destructuring to get the state props
 
         if (count === 0) return <p>There are no movies in the database</p>  //if no movies are in the database (movies.length === 0)
-            
         
-        const movies = Paginate(allMovies, currentPage, pageSize)
+        //if selectedGenre is truthy, filter allMovies and return any movie with the identical genere ID. else return all movies if there is no selectedGenre
+        const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
+            
+        const movies = Paginate(filtered, currentPage, pageSize)
         
         return (
             <React.Fragment>
                 <div className="row">
                     <div className="col-3">
-                        <ListGroup 
+                        <ListGroup                              //ListGroup props
                             items={genres} 
-                            onItemSelect={this.handleGenreSelect}
+                            onItemSelect={this.handleGenreSelect} // runs first
+                            selectedItem={selectedGenre}          //runs after onItemSelect. now the selectedItem is the current clicked Genere
                         />
                     </div>
                     <div className="col">
-                        <p>Showing {count} movies in the database</p>
+                        <p>Showing {filtered.length} movies in the database</p>
                         <table className="table">
                             <thead>
                                 <tr>
@@ -95,7 +99,7 @@ export default class Movies extends Component {
                             </tbody>
                         </table>
                         <Pagination 
-                            itemsCount={count} 
+                            itemsCount={filtered.length}   //instead of count because now each filtered movies object might have only 1 page of movies                                       //Pagination props
                             pageSize={pageSize} 
                             currentPage={currentPage}
                             onPageChange={this.handlePageChange}
