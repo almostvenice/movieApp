@@ -4,7 +4,7 @@ import Pagination from './common/pagination';
 import { Paginate } from '../utils/paginate';
 import ListGroup from './common/listGroup';
 import { getGenres } from '../services/fakeGenreService';
-import _, { spread } from 'lodash';
+import _ { spread } from 'lodash';
 import MoviesTable from './moviesTable';
 
 
