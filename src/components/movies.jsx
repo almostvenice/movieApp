@@ -4,7 +4,7 @@ import Pagination from './common/pagination';
 import { Paginate } from '../utils/paginate';
 import ListGroup from './common/listGroup';
 import { getGenres } from '../services/fakeGenreService';
-import _ from 'lodash';
+import _, { spread } from 'lodash';
 import MoviesTable from './moviesTable';
 
 
@@ -46,11 +46,26 @@ export default class Movies extends Component {
     }
 
     handleSort = path => {
-        this.setState({ sortColumn: {path, order: 'asc'}})
+        const sortColumn = {...this.state.sortColumn};
+        if (sortColumn.path === path) {
+            sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
+        } else {
+            sortColumn.path = path;   //if the path is different, meaning a different column then set the new path to that path
+            sortColumn.order = 'asc'; //make the sort order ascending since its the first click on that column
+        }
+        this.setState({ sortColumn }); //passing the path/column and order of sort 'ascending'
+
     }
     render() {
         const {length: count} = this.state.movies;      //destructuring to get the count of movies.length
-        const {pageSize, currentPage, movies: allMovies, genres, selectedGenre, sortColumn} = this.state;     //destructuring to get the state props
+        const {
+            pageSize, 
+            currentPage, 
+            movies: allMovies, 
+            genres, 
+            selectedGenre, 
+            sortColumn
+        } = this.state;     //destructuring to get the state props
 
         if (count === 0) return <p>There are no movies in the database</p>  //if no movies are in the database (movies.length === 0)
         
