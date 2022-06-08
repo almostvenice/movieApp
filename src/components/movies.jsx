@@ -45,14 +45,7 @@ export default class Movies extends Component {
         this.setState({selectedGenre: genre, currentPage: 1}) //needs current page for when you are on page 2+ and switch to a genre with only 1 page
     }
 
-    handleSort = path => {
-        const sortColumn = {...this.state.sortColumn};
-        if (sortColumn.path === path) {
-            sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
-        } else {
-            sortColumn.path = path;   //if the path is different, meaning a different column then set the new path to that path
-            sortColumn.order = 'asc'; //make the sort order ascending since its the first click on that column
-        }
+    handleSort = sortColumn => {
         this.setState({ sortColumn }); //passing the path/column and order of sort 'ascending'
 
     }
@@ -90,6 +83,7 @@ export default class Movies extends Component {
                         <p>Showing {filtered.length} movies in the database</p>
                         <MoviesTable
                             movies={movies}
+                            sortColumn={sortColumn}
                             onLike={this.handleLike}
                             onDelete={this.onDelete}
                             onSort={this.handleSort}
