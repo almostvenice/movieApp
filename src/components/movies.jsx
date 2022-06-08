@@ -58,6 +58,7 @@ export default class Movies extends Component {
             selectedGenre, 
             sortColumn
         } = this.state;
+
          //if selectedGenre is truthy, filter allMovies and return any movie with the identical genere ID. else return all movies if there is no selectedGenre
          const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
         
@@ -65,7 +66,7 @@ export default class Movies extends Component {
          
          const movies = Paginate(sorted, currentPage, pageSize)
          
-         return { totalCount: filtered.length, data: movies}
+         return { totalCount: filtered.length, data: movies} //length of filtered/total count of all movies in filtered database... movies is the sorted movies for that page
     } 
     render() {
         const {length: count} = this.state.movies;      //destructuring to get the count of movies.length

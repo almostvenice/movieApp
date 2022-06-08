@@ -1,13 +1,13 @@
 import React from 'react';
 
-const ListGroup = props => {
-const {
+const ListGroup = ({        //destructuring all props passed thru the function
     items, 
     textProperty, 
     valueProperty, 
     onItemSelect, 
     selectedItem
-} = props; //destructuring all props passed thru
+}) => {
+
 
     return ( 
         <ul className="list-group">

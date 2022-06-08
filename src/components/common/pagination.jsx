@@ -2,8 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 
-const Pagination = (props) => {
-    const {itemsCount, pageSize, onPageChange, currentPage } = props; //destructuring props of pagination
+const Pagination = ({itemsCount, pageSize, onPageChange, currentPage }) => { //destructuring props of pagination
 
     const pagesCount = Math.ceil(itemsCount / pageSize); //pagesCount = roundedUp(x / y) because it would = 0.9 otherwise
     if (pagesCount === 1) return null; //if there is only 1 page, dont show the pagination component
