@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import TableHeader from './common/tableHeader';
-import TableBody from './common/tableBody';
-import Like from './common/like'
+import Like from './common/like';
+import Table from './common/table';
 
 class MoviesTable extends Component {
     columns = [
@@ -11,8 +10,10 @@ class MoviesTable extends Component {
         {path: "dailyRentalRate", label: "Rate"},
         { 
             key: "like", 
-            content: movie => <Like liked={movie.liked} onClick={() => this.props.onLike(movie)}/>  //because they are empty columns with no path/title they need a key
-        },          //must set as function for movie reference and this.props. to reference onLike from the movies.jsx
+            content: movie => (
+            <Like liked={movie.liked} onClick={() => this.props.onLike(movie)}/>
+            )               //because they are empty columns with no path/title they need a key
+        },                  //must set as function for movie reference and this.props. to reference onLike from the movies.jsx
         { 
             key: "delete",
             content: movie => (
@@ -23,23 +24,17 @@ class MoviesTable extends Component {
                     Delete
                 </button>
             )
-
         }
     ]
     render() { 
     const {movies, onSort, sortColumn} = this.props;
     return ( 
-        <table className="table">
-            <TableHeader 
-                columns={this.columns}
-                sortColumn={sortColumn}
-                onSort={onSort}
-            />
-            <TableBody 
-                data={movies}
-                columns={this.columns}   
-            />
-        </table>
+        <Table 
+            columns={this.columns}
+            data={movies}
+            sortColumn={sortColumn}
+            onSort={onSort}
+        />
      );
     }
 }
