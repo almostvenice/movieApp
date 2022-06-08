@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import { getMovies } from '../services/fakeMovieService';
-import Like from './common/like';
 import Pagination from './common/pagination';
 import { Paginate } from '../utils/paginate';
 import ListGroup from './common/listGroup';
 import { getGenres } from '../services/fakeGenreService';
+import _ from 'lodash';
+import MoviesTable from './moviesTable';
 
 
 export default class Movies extends Component {
     state = {
         movies: [],
-        pageSize: 4,
+        genres: [],
         currentPage: 1,
-        genres: []
+        pageSize: 4,
+        sortColumn: {path: 'title', order: 'asc'}
+
     };
 
     handleDelete = movie => {
@@ -21,7 +24,7 @@ export default class Movies extends Component {
     };
 
     componentDidMount() {
-        const genres = [{ name: 'All Genres'}, ...getGenres()]
+        const genres = [{ _id: '', name: 'All Genres'}, ...getGenres()] //set _id to empty string because All Generes has no ID
         this.setState({ movies: getMovies(), genres: genres})
     }
 
@@ -42,16 +45,22 @@ export default class Movies extends Component {
         this.setState({selectedGenre: genre, currentPage: 1}) //needs current page for when you are on page 2+ and switch to a genre with only 1 page
     }
 
+    handleSort = path => {
+        // this.setState({ sortColumn: {path, order: 'asc'}})
+        console.log(path)
+    }
     render() {
         const {length: count} = this.state.movies;      //destructuring to get the count of movies.length
-        const {pageSize, currentPage, movies: allMovies, genres, selectedGenre} = this.state;     //destructuring to get the state props
+        const {pageSize, currentPage, movies: allMovies, genres, selectedGenre, sortColumn} = this.state;     //destructuring to get the state props
 
         if (count === 0) return <p>There are no movies in the database</p>  //if no movies are in the database (movies.length === 0)
         
         //if selectedGenre is truthy, filter allMovies and return any movie with the identical genere ID. else return all movies if there is no selectedGenre
         const filtered = selectedGenre && selectedGenre._id ? allMovies.filter(m => m.genre._id === selectedGenre._id) : allMovies;
-            
-        const movies = Paginate(filtered, currentPage, pageSize)
+        
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
+        
+        const movies = Paginate(sorted, currentPage, pageSize)
         
         return (
             <React.Fragment>
@@ -65,39 +74,12 @@ export default class Movies extends Component {
                     </div>
                     <div className="col">
                         <p>Showing {filtered.length} movies in the database</p>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Genre</th>
-                                    <th>Stock</th>
-                                    <th>Rate</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {movies.map(movie => (   //map thru the movies array. for each movie create this HTML <tr>...</tr> with a key of {movie._id} from fakeMovieService.js
-                                <tr key={movie._id}>                
-                                    <td>{movie.title}</td>
-                                    <td>{movie.genre.name}</td>
-                                    <td>{movie.numberInStock}</td>
-                                    <td>{movie.dailyRentalRate}</td>
-                                    <td>
-                                        <Like 
-                                            liked={movie.liked} 
-                                            onClick={() => this.handleLike(movie)}
-                                        /> 
-                                    </td>
-                                    <td>
-                                        <button 
-                                            onClick={() => this.handleDelete(movie)} 
-                                            className="btn btn-danger btn-sm">Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <MoviesTable
+                            movies={movies}
+                            onLike={this.handleLike}
+                            onDelete={this.onDelete}
+                            onSort={this.handleSort}
+                        />
                         <Pagination 
                             itemsCount={filtered.length}   //instead of count because now each filtered movies object might have only 1 page of movies                                       //Pagination props
                             pageSize={pageSize} 

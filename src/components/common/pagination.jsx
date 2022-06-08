@@ -30,8 +30,8 @@ const Pagination = (props) => {
 Pagination.propTypes = {                            //checks if each prop was passed and if it was the correct type
     itemsCount: PropTypes.number.isRequired, 
     pageSize: PropTypes.number.isRequired, 
-    onPageChange: PropTypes.number.isRequired, 
-    currentPage: PropTypes.func.isRequired
+    onPageChange: PropTypes.func.isRequired, 
+    currentPage: PropTypes.number.isRequired
 }
  
 export default Pagination;
