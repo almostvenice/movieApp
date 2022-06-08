@@ -46,8 +46,7 @@ export default class Movies extends Component {
     }
 
     handleSort = path => {
-        // this.setState({ sortColumn: {path, order: 'asc'}})
-        console.log(path)
+        this.setState({ sortColumn: {path, order: 'asc'}})
     }
     render() {
         const {length: count} = this.state.movies;      //destructuring to get the count of movies.length
