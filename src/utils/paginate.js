@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export function paginate(items, pageNumber, pageSize) { //takes {allMovies array}, {currentPageNumber}, {itemsPerPage}
+export function Paginate(items, pageNumber, pageSize) { //takes {allMovies array}, {currentPageNumber}, {itemsPerPage}
     const startIndex = (pageNumber - 1) * pageSize; //currentPage(i.e 1 - 1 = 0) * pagesize (0 * 4 = 0)
     return _(items)
         .slice(startIndex) // slice from index of 0
