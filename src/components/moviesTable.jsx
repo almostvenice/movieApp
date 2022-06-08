@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TableHeader from './common/tableHeader';
 import TableBody from './common/tableBody';
+import Like from './common/like'
 
 class MoviesTable extends Component {
     columns = [
@@ -8,11 +9,25 @@ class MoviesTable extends Component {
         {path: "genre.name", label: "Genre"},
         {path: "numberInStock", label: "Stock"},
         {path: "dailyRentalRate", label: "Rate"},
-        { key: "like"},     //because they are empty columns with no path/title they need a key
-        { key: "delete"}
+        { 
+            key: "like", 
+            content: movie => <Like liked={movie.liked} onClick={() => this.props.onLike(movie)}/>  //because they are empty columns with no path/title they need a key
+        },          //must set as function for movie reference and this.props. to reference onLike from the movies.jsx
+        { 
+            key: "delete",
+            content: movie => (
+                <button 
+                    onClick={() => this.props.onDelete(movie)}
+                    className="btn btn-danger btn-sm"    
+                >
+                    Delete
+                </button>
+            )
+
+        }
     ]
     render() { 
-    const {movies, onDelete, onLike, onSort, sortColumn} = this.props;
+    const {movies, onSort, sortColumn} = this.props;
     return ( 
         <table className="table">
             <TableHeader 
